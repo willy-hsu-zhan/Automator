@@ -1,3 +1,6 @@
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QComboBox, QFileDialog
+from PyQt5 import QtCore
+from views.view import AddDatabaseDialog
 class Controller:
     def __init__(self, main_window):
         self.main_window = main_window
@@ -11,6 +14,12 @@ class Controller:
         self.main_window.pushButton_skip.clicked.connect(self.on_button_skip_clicked)
         self.main_window.comboBox_database.currentIndexChanged.connect(self.on_combobox_database_changed)
 
+        self.main_window.pushButton_add_database.clicked.connect(self.on_button_add_database_clicked)
+        self.checkbox_use_ssh.stateChanged.connect(self.on_use_ssh_checkbox_changed)
+
+    def setup_ui_connections(self):
+        self.main_window.pushButton_add_database.clicked.connect(self.on_button_add_database_clicked)
+
     def on_button_connect_clicked(self):
         # 處理連線按鈕被點擊時的邏輯
         print("連線按鈕被點擊了！")
@@ -22,6 +31,9 @@ class Controller:
     def on_button_add_database_clicked(self):
         # 處理新增數據庫按鈕被點擊時的邏輯
         print("新增數據庫按鈕被點擊了！")
+        dialog = AddDatabaseDialog()
+        dialog.update_ssh_fields() # 預設設為未啟用
+        dialog.exec_()
 
     def on_button_confirm_clicked(self):
         # 處理確認執行按鈕被點擊時的邏輯
@@ -35,3 +47,22 @@ class Controller:
         # 處理 ComboBox 資料庫選擇改變時的邏輯
         selected_database = self.main_window.comboBox_database.itemText(index)
         print("選擇的資料庫是:", selected_database)
+
+    def set_ssh_widgets_enabled(self, enabled):
+        self.label_ssh_host.setEnabled(enabled)
+        self.edit_ssh_host.setEnabled(enabled)
+        self.label_ssh_port.setEnabled(enabled)
+        self.edit_ssh_port.setEnabled(enabled)
+        self.label_auth_method.setEnabled(enabled)
+        self.combo_auth_method.setEnabled(enabled)
+        self.label_ssh_password.setEnabled(enabled)
+        self.edit_ssh_password.setEnabled(enabled)
+        self.label_private_key.setEnabled(enabled)
+        self.edit_private_key.setEnabled(enabled)
+        self.btn_browse_private_key.setEnabled(enabled)
+        self.label_passphrase.setEnabled(enabled)
+        self.edit_passphrase.setEnabled(enabled)
+
+    def on_use_ssh_checkbox_changed(self, state):
+        enabled = state == QtCore.Qt.Checked
+        self.set_ssh_widgets_enabled(enabled)

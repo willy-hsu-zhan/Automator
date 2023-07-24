@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
-
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QCheckBox, QComboBox, QPushButton, QVBoxLayout, QHBoxLayout
 class Ui_MainWindow(object):
-    
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(600, 480)
@@ -105,3 +105,129 @@ class Ui_MainWindow(object):
         self.pushButton_confirm.setText(_translate("MainWindow", "確認執行"))
         self.pushButton_skip.setText(_translate("MainWindow", "跳過這筆"))
 
+class AddDatabaseDialog(QDialog):
+    def __init__(self):
+        super(AddDatabaseDialog, self).__init__()
+        self.setWindowTitle("新增數據庫")
+        self.init_ui()
+
+    def init_ui(self):
+        # 創建所有視窗元件
+        self.label_db_name = QLabel("連線名稱:")
+        self.edit_db_name = QLineEdit()
+
+        self.label_host = QLabel("主機:")
+        self.edit_host = QLineEdit()
+
+        self.label_port = QLabel("連接阜:")
+        self.edit_port = QLineEdit()
+
+        self.label_username = QLabel("用戶名稱:")
+        self.edit_username = QLineEdit()
+
+        self.label_password = QLabel("密碼:")
+        self.edit_password = QLineEdit()
+
+        self.checkbox_use_ssh = QCheckBox("使用SSH")
+
+        self.label_ssh_host = QLabel("SSH主機:")
+        self.edit_ssh_host = QLineEdit()
+
+        self.label_ssh_port = QLabel("SSH連接阜:")
+        self.edit_ssh_port = QLineEdit()
+
+        self.label_auth_method = QLabel("驗證方法:")
+        self.combo_auth_method = QComboBox()
+        self.combo_auth_method.addItems(["密碼", "公鑰", "密碼和公鑰"])
+
+        self.label_ssh_password = QLabel("SSH密碼:")
+        self.edit_ssh_password = QLineEdit()
+
+        self.label_private_key = QLabel("私鑰:")
+        self.edit_private_key = QLineEdit()
+        self.btn_browse_private_key = QPushButton("瀏覽")
+
+        self.label_passphrase = QLabel("通行密碼:")
+        self.edit_passphrase = QLineEdit()
+
+        self.btn_confirm = QPushButton("確定")
+        self.btn_cancel = QPushButton("取消")
+
+        # 設定元件的佈局
+        layout = QVBoxLayout()
+
+        layout.addWidget(self.label_db_name)
+        layout.addWidget(self.edit_db_name)
+
+        layout.addWidget(self.label_host)
+        layout.addWidget(self.edit_host)
+
+        layout.addWidget(self.label_port)
+        layout.addWidget(self.edit_port)
+
+        layout.addWidget(self.label_username)
+        layout.addWidget(self.edit_username)
+
+        layout.addWidget(self.label_password)
+        layout.addWidget(self.edit_password)
+
+        layout.addWidget(self.checkbox_use_ssh)
+
+        layout.addWidget(self.label_ssh_host)
+        layout.addWidget(self.edit_ssh_host)
+
+        layout.addWidget(self.label_ssh_port)
+        layout.addWidget(self.edit_ssh_port)
+
+        layout.addWidget(self.label_auth_method)
+        layout.addWidget(self.combo_auth_method)
+
+        layout.addWidget(self.label_ssh_password)
+        layout.addWidget(self.edit_ssh_password)
+
+        layout.addWidget(self.label_private_key)
+        layout.addWidget(self.edit_private_key)
+        layout.addWidget(self.btn_browse_private_key)
+
+        layout.addWidget(self.label_passphrase)
+        layout.addWidget(self.edit_passphrase)
+
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.btn_confirm)
+        button_layout.addWidget(self.btn_cancel)
+
+        layout.addLayout(button_layout)
+
+        self.setLayout(layout) # init --------
+
+        # 設定 "使用SSH" checkbox 的切換事件
+        self.checkbox_use_ssh.toggled.connect(self.update_ssh_fields)
+        # 設定 "確定" 按鈕的點擊事件
+        self.btn_confirm.clicked.connect(self.on_confirm_clicked)
+        # 設定 "取消" 按鈕的點擊事件
+        self.btn_cancel.clicked.connect(self.on_cancel_clicked)
+
+    def update_ssh_fields(self):
+        checked = self.checkbox_use_ssh.isChecked()
+        self.label_ssh_host.setEnabled(checked)
+        self.edit_ssh_host.setEnabled(checked)
+        self.label_ssh_port.setEnabled(checked)
+        self.edit_ssh_port.setEnabled(checked)
+        self.label_auth_method.setEnabled(checked)
+        self.combo_auth_method.setEnabled(checked)
+        self.label_ssh_password.setEnabled(checked)
+        self.edit_ssh_password.setEnabled(checked)
+        self.label_private_key.setEnabled(checked)
+        self.edit_private_key.setEnabled(checked)
+        self.btn_browse_private_key.setEnabled(checked)
+        self.label_passphrase.setEnabled(checked)
+        self.edit_passphrase.setEnabled(checked)
+
+    def on_confirm_clicked(self):
+        # 處理按下 "確定" 按鈕的邏輯
+        # 在這裡取得使用者輸入的數據，並進行相應處理
+        self.accept()  # 關閉對話框並回傳 QDialog.Accepted
+
+    def on_cancel_clicked(self):
+        # 處理按下 "取消" 按鈕的邏輯
+        self.reject()  # 關閉對話框並回傳 QDialog.Rejected
