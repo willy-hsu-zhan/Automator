@@ -1,7 +1,14 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QComboBox, QFileDialog
 from PyQt5 import QtCore
 from views.view import AddDatabaseDialog
+import json
 class Controller:
+    hostname = ""
+    port = ""
+    database = ""
+    username = ""
+    password = ""
+
     def __init__(self, main_window):
         self.main_window = main_window
         self.setup_ui_connections()
@@ -15,10 +22,7 @@ class Controller:
         self.main_window.comboBox_database.currentIndexChanged.connect(self.on_combobox_database_changed)
 
         self.main_window.pushButton_add_database.clicked.connect(self.on_button_add_database_clicked)
-        self.checkbox_use_ssh.stateChanged.connect(self.on_use_ssh_checkbox_changed)
-
-    def setup_ui_connections(self):
-        self.main_window.pushButton_add_database.clicked.connect(self.on_button_add_database_clicked)
+        # self.main_window.checkbox_use_ssh.stateChanged.connect(self.on_use_ssh_checkbox_changed) #點擊按鈕後再顯示出來
 
     def on_button_connect_clicked(self):
         # 處理連線按鈕被點擊時的邏輯
@@ -45,8 +49,19 @@ class Controller:
 
     def on_combobox_database_changed(self, index):
         # 處理 ComboBox 資料庫選擇改變時的邏輯
-        selected_database = self.main_window.comboBox_database.itemText(index)
-        print("選擇的資料庫是:", selected_database)
+        selected_db_text = self.main_window.comboBox_database.currentText()
+        print(f"Selected item: {selected_db_text}")
+
+        with open("config/db.json", "r") as file:
+            data = json.load(file)
+        if data[selected_db_text] is not None:
+            self.database = data[selected_db_text]["database"]
+            self.port = data[selected_db_text]["port"]
+            self.username = data[selected_db_text]["username"]
+            self.password = data[selected_db_text]["password"]
+            self.database = data[selected_db_text]["database"]
+        # else:
+        #     print('selected DATABASE ERROR')  連線action再來檔空值
 
     def set_ssh_widgets_enabled(self, enabled):
         self.label_ssh_host.setEnabled(enabled)

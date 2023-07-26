@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QCheckBox, QComboBox, QPushButton, QVBoxLayout, QHBoxLayout
+import json
 class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
@@ -25,8 +26,13 @@ class Ui_MainWindow(object):
         self.comboBox_database = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox_database.setGeometry(QtCore.QRect(103, 8, 51, 22))
         self.comboBox_database.setObjectName("comboBox_database")
+
+        with open("config/db.json", "r") as file:
+            data = json.load(file)
+        # 先塞空值
         self.comboBox_database.addItem("")
-        self.comboBox_database.addItem("")
+        # 將 key 值填充到 ComboBox
+        self.comboBox_database.addItems(data.keys())
 
         # 連線相關元件
         self.pushButton_connect = QtWidgets.QPushButton(self.centralwidget)
@@ -97,8 +103,6 @@ class Ui_MainWindow(object):
         self.label_task.setText(_translate("MainWindow", "Task:"))
         self.pushButton_connect.setText(_translate("MainWindow", "連線"))
         self.pushButton_reset.setText(_translate("MainWindow", "重置名稱"))
-        self.comboBox_database.setItemText(0, _translate("MainWindow", "VAE"))
-        self.comboBox_database.setItemText(1, _translate("MainWindow", "VAS"))
         self.pushButton_add_database.setText(_translate("MainWindow", "新增數據庫"))
         self.label_sql_preview.setText(_translate("MainWindow", "SQL預覽:"))
         self.label_message.setText(_translate("MainWindow", "提示訊息:"))

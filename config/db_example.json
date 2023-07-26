@@ -1,0 +1,32 @@
+{
+    "nickname1" : {
+        "hostname":"",
+        "port":"",
+        "database":"",
+        "username":"",
+        "password":"",
+        "ssh" : {
+            
+        }
+    },
+    "nickname2" : {
+        "hostname":"",
+        "port":"",
+        "database":"",
+        "username":"",
+        "password":"",
+        "ssh" : {
+            
+        }
+    },
+    "nickname3" : {
+        "hostname":"",
+        "port":"",
+        "database":"",
+        "username":"",
+        "password":"",
+        "ssh" : {
+            
+        }
+    }
+}
