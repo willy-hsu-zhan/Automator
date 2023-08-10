@@ -2,12 +2,16 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QVBoxLayout, QLa
 from PyQt5 import QtCore
 from views.view import AddDatabaseDialog
 import json
+import mysql.connector
+
 class Controller:
     hostname = ""
     port = ""
     database = ""
-    username = ""
+    user = ""
     password = ""
+
+    errormsg = ""
 
     def __init__(self, main_window):
         self.main_window = main_window
@@ -27,6 +31,12 @@ class Controller:
     def on_button_connect_clicked(self):
         # 處理連線按鈕被點擊時的邏輯
         print("連線按鈕被點擊了！")
+        print(self.create_connection())
+        if self.hostname is not None and self.create_connection():
+            self.main_window.textBrowser_message.setText("連線成功！")
+        else:
+            print("ERROR" + "你未選擇資料庫或連線失敗")
+            self.main_window.textBrowser_message.setText("連線失敗！")
 
     def on_button_reset_clicked(self):
         # 處理重置名稱按鈕被點擊時的邏輯
@@ -55,9 +65,9 @@ class Controller:
         with open("config/db.json", "r") as file:
             data = json.load(file)
         if data[selected_db_text] is not None:
-            self.database = data[selected_db_text]["database"]
+            self.hostname = data[selected_db_text]["hostname"]
             self.port = data[selected_db_text]["port"]
-            self.username = data[selected_db_text]["username"]
+            self.user = data[selected_db_text]["user"]
             self.password = data[selected_db_text]["password"]
             self.database = data[selected_db_text]["database"]
         # else:
@@ -81,3 +91,71 @@ class Controller:
     def on_use_ssh_checkbox_changed(self, state):
         enabled = state == QtCore.Qt.Checked
         self.set_ssh_widgets_enabled(enabled)
+
+
+    ## database 待優化
+
+    # 建立数据库连接
+    def create_connection(self):
+        hostname = ""
+        port = ""
+        database = ""
+        username = ""
+        password = ""
+        print(self.hostname)
+        print(self.port)
+        print(self.database)
+        print(self.user)
+        print(self.password)
+        # try:
+        #     print(11112323132)
+        #     connection = mysql.connector.connect(
+        #         host='localhost',      # 数据库主机地址
+        #         user='root',  # 数据库用户名
+        #         password='root',  # 数据库密码
+        #         database='versiontool'  # 要连接的数据库名
+        #     )
+        #     print(1132)
+        #     if connection.is_connected():
+        #         print("成功连接到MySQL数据库")
+        #         return connection
+        # except mysql.connector.Error as e:
+        #     print(f"连接失败：{e}")
+        #     return None
+        try:
+            connection = mysql.connector.connect(
+                host=self.hostname,      # 数据库主机地址
+                port=self.port,
+                user=self.user,  # 数据库用户名
+                password=self.password,  # 数据库密码
+                database=self.database  # 要连接的数据库名
+            )
+            if connection.is_connected():
+                print("成功连接到MySQL数据库")
+                return connection
+        except mysql.connector.Error as e:
+            print(f"连接失败：{e}")
+            return None
+
+    # 执行查询操作
+    def execute_query(self, connection, query):
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except mysql.connector.Error as e:
+            print(f"执行查询操作失败：{e}")
+            return None
+
+    # 关闭数据库连接
+    def close_connection(self, connection):
+        if connection:
+            connection.close()
+            print("数据库连接已关闭")
+
+    def closeEvent(self, event): # 關閉資料庫事件
+        # 在窗口关闭时调用
+        self.close_connection()  # 在窗口关闭时执行 close_connection
+        event.accept()
+

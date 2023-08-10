@@ -3,7 +3,7 @@
         "hostname":"",
         "port":"",
         "database":"",
-        "username":"",
+        "user":"",
         "password":"",
         "ssh" : {
             
@@ -13,7 +13,7 @@
         "hostname":"",
         "port":"",
         "database":"",
-        "username":"",
+        "user":"",
         "password":"",
         "ssh" : {
             
@@ -23,7 +23,7 @@
         "hostname":"",
         "port":"",
         "database":"",
-        "username":"",
+        "user":"",
         "password":"",
         "ssh" : {
             

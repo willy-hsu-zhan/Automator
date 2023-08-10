@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.label_database.setText(_translate("MainWindow", "資料庫名稱:"))
         self.label_task.setText(_translate("MainWindow", "Task:"))
         self.pushButton_connect.setText(_translate("MainWindow", "連線"))
-        self.pushButton_reset.setText(_translate("MainWindow", "重置名稱"))
+        self.pushButton_reset.setText(_translate("MainWindow", "重置名稱")) #預計改為編輯資料庫
         self.pushButton_add_database.setText(_translate("MainWindow", "新增數據庫"))
         self.label_sql_preview.setText(_translate("MainWindow", "SQL預覽:"))
         self.label_message.setText(_translate("MainWindow", "提示訊息:"))
