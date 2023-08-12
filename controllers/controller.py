@@ -10,7 +10,6 @@ class Controller:
     database = ""
     user = ""
     password = ""
-
     errormsg = ""
 
     def __init__(self, main_window):
@@ -97,31 +96,6 @@ class Controller:
 
     # 建立数据库连接
     def create_connection(self):
-        hostname = ""
-        port = ""
-        database = ""
-        username = ""
-        password = ""
-        print(self.hostname)
-        print(self.port)
-        print(self.database)
-        print(self.user)
-        print(self.password)
-        # try:
-        #     print(11112323132)
-        #     connection = mysql.connector.connect(
-        #         host='localhost',      # 数据库主机地址
-        #         user='root',  # 数据库用户名
-        #         password='root',  # 数据库密码
-        #         database='versiontool'  # 要连接的数据库名
-        #     )
-        #     print(1132)
-        #     if connection.is_connected():
-        #         print("成功连接到MySQL数据库")
-        #         return connection
-        # except mysql.connector.Error as e:
-        #     print(f"连接失败：{e}")
-        #     return None
         try:
             connection = mysql.connector.connect(
                 host=self.hostname,      # 数据库主机地址
